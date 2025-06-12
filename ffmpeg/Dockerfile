@@ -196,4 +196,12 @@ COPY --from=builder /opt/ffmpeg-runtime /usr/lib/
 
 ENV PATH="/opt/ffmpeg/bin:${PATH}"
 
+# install pip
+RUN apk add py3-pip git
+
+# install streamlink
+# https://github.com/streamlink/streamlink/releases
+RUN pip install --no-cache-dir --break-system-packages \
+    https://github.com/streamlink/streamlink/releases/download/7.1.3/streamlink-7.1.3.tar.gz
+
 CMD ["ffmpeg", "-version"]
