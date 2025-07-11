@@ -131,16 +131,15 @@ RUN git clone --depth=1 --branch=3.6 https://bitbucket.org/multicoreware/x265_gi
     make install && \
     cp libx265.so.* /usr/local/lib/
 
-# 克隆 FFmpeg 6.0 官方源码
 WORKDIR /build
-RUN git clone --branch n6.0 --depth=1 https://git.ffmpeg.org/ffmpeg.git ffmpeg
 
-RUN git clone https://github.com/runner365/ffmpeg_rtmp_h265.git ffmpeg_rtmp_h265
+RUN git init ffmpeg && \
+    cd ffmpeg && \
+    git remote add origin https://git.ffmpeg.org/ffmpeg.git && \
+    git fetch --depth=1 origin 3334bdc6e70dfdbf753fa81da0d8321a1c5c7eeb && \
+    git checkout FETCH_HEAD
 
-# flv 补丁
 WORKDIR /build/ffmpeg
-RUN cp ../ffmpeg_rtmp_h265/flv*.c ./libavformat/ && \
-    cp ../ffmpeg_rtmp_h265/flv.h ./libavformat/
 
 # 修复配置命令
 RUN ./configure \
