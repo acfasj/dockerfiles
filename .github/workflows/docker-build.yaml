@@ -20,11 +20,20 @@ jobs:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
 
-      - name: Build and push (linux/amd64)
+      # - name: Build and push (linux/amd64)
+      #   uses: docker/build-push-action@v5
+      #   with:
+      #     context: ./ffmpeg
+      #     file: ./ffmpeg/Dockerfile
+      #     push: true
+      #     platforms: linux/amd64
+      #     tags: acfasj/ffmpeg:latest
+
+      - name: Build and push (linux/arm64)
         uses: docker/build-push-action@v5
         with:
           context: ./ffmpeg
           file: ./ffmpeg/Dockerfile
           push: true
-          platforms: linux/amd64
-          tags: acfasj/ffmpeg:latest
+          platforms: linux/arm64
+          tags: acfasj/ffmpeg:latest-arm64
