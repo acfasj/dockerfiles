@@ -1,7 +1,7 @@
 # -----------------------
 # STAGE 1: BUILD FFmpeg
 # -----------------------
-FROM alpine:3.20 as builder
+FROM alpine:3.20 AS builder
 
 RUN apk update && apk add --no-cache \
     libgomp \
@@ -132,12 +132,10 @@ RUN git clone --depth=1 --branch=3.6 https://bitbucket.org/multicoreware/x265_gi
     cp libx265.so.* /usr/local/lib/
 
 WORKDIR /build
-
-RUN git init ffmpeg && \
-    cd ffmpeg && \
-    git remote add origin https://git.ffmpeg.org/ffmpeg.git && \
-    git fetch --depth=1 origin 3334bdc6e70dfdbf753fa81da0d8321a1c5c7eeb && \
-    git checkout FETCH_HEAD
+RUN wget -O ffmpeg.tar.gz \
+    https://codeload.github.com/FFmpeg/FFmpeg/tar.gz/3334bdc6e70dfdbf753fa81da0d8321a1c5c7eeb && \
+    tar -xzf ffmpeg.tar.gz && \
+    mv FFmpeg-3334bdc6e70dfdbf753fa81da0d8321a1c5c7eeb ffmpeg
 
 WORKDIR /build/ffmpeg
 
@@ -184,7 +182,7 @@ RUN mkdir -p /opt/ffmpeg-runtime && \
 # -----------------------
 # STAGE 2: RUNTIME
 # -----------------------
-FROM alpine:3.20 as runtime
+FROM alpine:3.20 AS runtime
 
 # 安装运行时最小依赖（避免缺 libgcc 等基础库）
 RUN apk add --no-cache libgcc libstdc++
